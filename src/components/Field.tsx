@@ -18,17 +18,17 @@ interface FieldProps {
 }
 
 const initialState = {
-  sections: [],
+  sections: {},
 };
 
 const Field = ({ sdk }: FieldProps) => {
+
   const [state, dispatch] = React.useReducer(curriedReducerFunction, initialState);
   const { ...fieldActions } = useField(dispatch);
 
   React.useEffect(() => {
     if (sdk.field.getValue() !== undefined) {
-      console.log(`HELLO : ${JSON.stringify(sdk.field.getValue())}`)
-      dispatch({ type: "setStateFromAPI", payload: sdk.field.getValue() });
+      fieldActions.setStateFromAPI(sdk.field.getValue());
     }
     sdk.window.startAutoResizer();
   }, []);
@@ -37,17 +37,18 @@ const Field = ({ sdk }: FieldProps) => {
     sdk.field.setValue(state);
   }, [state]);
 
-  const contextOptions = {
+  const context = {
     state,
     fieldActions,
     sdk
   }
 
   return (
-    <FieldContext.Provider value={contextOptions}>
+    <FieldContext.Provider value={context}>
     <div style={{ minHeight: 1200 }}>
-      {(state && state.sections && state.sections.length) &&
-        state.sections.map((section: any, i: number) => {
+      {(state && state.sections) &&
+        Object.values(state.sections).map((section: any, i: number) => {
+          console.log(section)
           return(
           <>
             <Flex
@@ -122,14 +123,14 @@ const Field = ({ sdk }: FieldProps) => {
             </Flex>
             <Grid
               style={{ ...STYLES.gridWrapper}}
-              columns={"1fr 1fr 1fr 1fr 1fr 1fr"}
+              columns={"repeat(6, 1fr)"}
               rowGap="spacingS"
               columnGap="spacingS"
             >
               {section.columns &&
-                section.columns.map((column: any, j: number) => {
+                Object.values(section.columns).map((column: any, j: number) => {
                   return (
-                    <CustomGridItem columnSpan={column.style} sectionIdx={i} columnIdx={j}/>
+                    <CustomGridItem columnSpan={column.style} sectionId={section.id} columnId={column.id}/>
                   );
                 })}
             </Grid>

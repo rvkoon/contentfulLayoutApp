@@ -6,11 +6,11 @@ import FieldContext from "../context/context"
 
 interface propsInterface {
   columnSpan: object;
-  sectionIdx: any
-  columnIdx: any
+  sectionId: any
+  columnId: any
 }
 
-const CustomGridItem = ({ columnSpan, sectionIdx, columnIdx }: propsInterface) => {
+const CustomGridItem = ({ columnSpan, sectionId, columnId }: propsInterface) => {
   const [isShown, setIsShown] = React.useState(false);
   const [editIsShown, setEditIsShown] = React.useState(false);
   const {state} = React.useContext(FieldContext)
@@ -24,8 +24,8 @@ const CustomGridItem = ({ columnSpan, sectionIdx, columnIdx }: propsInterface) =
       <ContentModal
         isShown={isShown}
         closeModal={closeModal}
-        sectionIdx={sectionIdx}
-        columnIdx={columnIdx}
+        sectionId={sectionId}
+        columnId={columnId}
       />
       <div
         style={{ ...STYLES.columnStyle, position: "relative" as "relative" }}
@@ -41,11 +41,13 @@ const CustomGridItem = ({ columnSpan, sectionIdx, columnIdx }: propsInterface) =
             style={{ ...STYLES.editButton, position: "absolute" as "absolute" }}
           />
         )}
-        {state.sections[sectionIdx].columns[columnIdx].data.map((d:any) => {
-          return (
-            <Paragraph>{JSON.stringify(d)}</Paragraph>
-          )
-        })}
+            {Object.values(state.sections[sectionId].columns[columnId].contents).map((content:any) => {
+              return (
+                <>
+                  <Paragraph>{content.data.text}</Paragraph>
+                </>
+              )
+            })}
         </div>
     </GridItem>
   );

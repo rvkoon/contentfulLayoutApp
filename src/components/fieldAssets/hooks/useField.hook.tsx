@@ -1,25 +1,33 @@
 export default function useField(dispatch: any){
 
-  const addSection = async () => {
+  const setStateFromAPI = (data: any) => {
+    dispatch({ type: "setStateFromAPI", data });
+  }
+
+  const addSection = () => {
     dispatch({type: 'addSection'})
   }
 
-  const deleteSection = (sectionIdx: number) => {
-    dispatch({type: 'deleteSection', payload: sectionIdx})
+  const deleteSection = (sectionId: number) => {
+    dispatch({type: 'deleteSection', sectionId})
   }
 
   const setSectionDisplayType = (displayType: string, sectionId: any) => {
     dispatch({type: 'setSectionDisplayType', displayType, sectionId})
   }
 
-  const addColumnData = (sectionIdx: any, columnIdx: string, data: object) => {
-    dispatch({type: 'addColumnData', sectionIdx, columnIdx, data })
+  const addColumnData = (
+    {sectionId, columnId, content}:
+    {sectionId: any, columnId: string, content: object}
+  ) => {
+    dispatch({type: 'addColumnData', sectionId, columnId, content })
   }
 
   return {
-      addSection,
-      deleteSection,
-      setSectionDisplayType,
-      addColumnData
+    setStateFromAPI,
+    addSection,
+    deleteSection,
+    setSectionDisplayType,
+    addColumnData
   }
 }

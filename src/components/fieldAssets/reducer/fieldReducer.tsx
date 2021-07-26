@@ -2,51 +2,56 @@ import { v4 as uuidv4 } from 'uuid';
 import {produce} from 'immer'
 
 
-function _createNewSection(){
+function _createNewSection(UID: string){
   return {
-    id: uuidv4(),
-    columns: [],
+    id: UID,
+    columns: {},
     displayType: null
   }
 }
 
-function _createColumn(colSize: number){
+function _createColumn(UID: string, colSize: number){
   return {
-    id: uuidv4(),
+    id: UID,
     colSize,
     style: {
       gridColumn: `span ${colSize}`
     },
-    data: []
+    contents: {}
   }
+}
+
+function _addColumn(newColumns: any, span: number){
+  const UID = uuidv4()
+  return {...newColumns, [UID]: _createColumn(UID, span)}
 }
 
 function _fillColumnsSchema(displayType: any){
 
-  const arr = []
+  let newColumns = {}
 
   switch(displayType){
     case 'oneCol':
-      arr.push(_createColumn(6))
-      return arr
+      newColumns = _addColumn(newColumns, 6)
+      return newColumns
     case 'fiftyFifty':
       for(let i = 0; i<2; i++){
-        arr.push(_createColumn(3))
+        newColumns = _addColumn(newColumns, 3)
       }
-      return arr
+      return newColumns
     case 'oneThirdTwoThirds':
-      arr.push(_createColumn(2))
-      arr.push(_createColumn(4))
-      return arr
+      newColumns = _addColumn(newColumns, 2)
+      newColumns = _addColumn(newColumns, 4)
+      return newColumns
     case 'twoThirdsOneThird':
-      arr.push(_createColumn(4))
-      arr.push(_createColumn(2))
-      return arr
+      newColumns = _addColumn(newColumns, 4)
+      newColumns = _addColumn(newColumns, 2)
+      return newColumns
     case 'threeCols':
       for(let i = 0; i<3; i++){
-        arr.push(_createColumn(2))
+        newColumns = _addColumn(newColumns, 2)
       }
-      return arr
+      return newColumns
   }
 }
 
@@ -55,35 +60,35 @@ export default function sectionsReducer(draft: any, action: any){
   switch(action.type){
     /****************************************/
     case 'setStateFromAPI': {
-      draft.sections = action.payload.sections
+      draft.sections = action.data.sections
       break
     }
 
     /****************************************/
     case 'addSection':{
-      draft.sections.push(_createNewSection())
+      const UID = uuidv4()
+      draft.sections[UID] = _createNewSection(UID)
       break
     }
 
     /****************************************/
     case 'deleteSection':{
-      draft.sections = draft.sections.filter((section: any) => section.id !== action.payload)
+      delete draft.sections[action.sectionId]
       break
     }
 
     /****************************************/
     case 'setSectionDisplayType':{
-      const selectedSectionIdx = draft.sections.findIndex((section: any) => section.id === action.sectionId)
-      draft.sections[selectedSectionIdx].displayType = action.displayType
-      draft.sections[selectedSectionIdx].columns = _fillColumnsSchema(action.displayType)
+      draft.sections[action.sectionId].displayType = action.displayType
+      draft.sections[action.sectionId].columns = _fillColumnsSchema(action.displayType)
       break
     }
 
     /****************************************/
     case 'addColumnData': {
-      // const selectedSectionIdx = draft.sections.findIndex((section: any) => section.id === action.sectionId)
-      // const selectedColumnIdx = draft.sections[selectedSectionIdx].findIndex((column: any) => column.id === action.columnId)
-      draft.sections[action.sectionIdx].columns[action.columnIdx].data.push(action.data)
+      const UID = uuidv4()
+      draft.sections[action.sectionId].columns[action.columnId].contents = 
+      {...draft.sections[action.sectionId].columns[action.columnId].contents, [UID]: {id: UID, data: action.content}}
       break
     }
   }

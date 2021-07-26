@@ -9,15 +9,13 @@ import FieldContext from "../context/context"
 interface IContentModal {
   isShown: boolean;
   closeModal: () => void;
-  sectionIdx: any
-  columnIdx: any
+  sectionId: any
+  columnId: any
 }
 
-const ContentModal = ({ isShown, closeModal, sectionIdx, columnIdx }: IContentModal) => {
+const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModal) => {
 
   const {state, fieldActions, sdk} = React.useContext(FieldContext)
-
-  console.log(state)
 
   return (
     <Modal
@@ -32,12 +30,14 @@ const ContentModal = ({ isShown, closeModal, sectionIdx, columnIdx }: IContentMo
           <Modal.Header title="Content" />
           <Modal.Content>
             {/* <Button onClick={() => sdk.space.createAsset({}).then((asset: any) => sdk.navigator.openAsset(asset.sys.id, { slideIn: true }))}></Button> */}
-            {state.sections[sectionIdx].columns[columnIdx].data.map((d:any) => {
+            {Object.values(state.sections[sectionId].columns[columnId].contents).map((content:any) => {
               return (
-                <Paragraph>{JSON.stringify(d)}</Paragraph>
+                <>
+                  <Paragraph>{content.data.text}</Paragraph>
+                </>
               )
             })}
-            <Button onClick={() => fieldActions.addColumnData(sectionIdx, columnIdx, {text: "Hello World"})}></Button>
+            <Button onClick={() => fieldActions.addColumnData({sectionId, columnId, content: {text: "Hello World"}})}></Button>
           </Modal.Content>
           <Modal.Controls position="right">
             <Button buttonType="primary" onClick={closeModal}>
