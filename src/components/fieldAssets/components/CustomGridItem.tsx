@@ -3,6 +3,7 @@ import { GridItem, Button, Paragraph } from "@contentful/forma-36-react-componen
 import STYLES from "../../../common/styles";
 import ContentModal from "./ContentModal";
 import FieldContext from "../context/context"
+import TextContent from './TextContent'
 
 interface propsInterface {
   columnSpan: object;
@@ -18,6 +19,20 @@ const CustomGridItem = ({ columnSpan, sectionId, columnId }: propsInterface) => 
   const closeModal = React.useCallback(() => {
     setIsShown(false);
   }, [setIsShown]);
+
+  const renderContent = (content: any) => {
+    if(content.contentType === 'text'){
+      return (
+        <TextContent
+          content={content}
+          mode="view"           
+          sectionId={sectionId}
+          columnId={columnId}
+          contentId={content.id}
+        />
+      )
+    }
+  }
 
   return (
     <GridItem style={{ ...columnSpan, minHeight: 300 }}>
@@ -41,13 +56,11 @@ const CustomGridItem = ({ columnSpan, sectionId, columnId }: propsInterface) => 
             style={{ ...STYLES.editButton, position: "absolute" as "absolute" }}
           />
         )}
-            {Object.values(state.sections[sectionId].columns[columnId].contents).map((content:any) => {
-              return (
-                <>
-                  <Paragraph>{content.data.text}</Paragraph>
-                </>
-              )
-            })}
+        {Object.values(state.sections[sectionId].columns[columnId].contents).map((content:any) => {
+          return (
+            renderContent(content)
+          )
+        })}
         </div>
     </GridItem>
   );

@@ -55,6 +55,15 @@ function _fillColumnsSchema(displayType: any){
   }
 }
 
+function _createTextData(){
+  return {
+    element: "p",
+    color: "#000",
+    isBold: false,
+    text: ""
+  }
+}
+
 
 export default function sectionsReducer(draft: any, action: any){
   switch(action.type){
@@ -85,10 +94,23 @@ export default function sectionsReducer(draft: any, action: any){
     }
 
     /****************************************/
-    case 'addColumnData': {
+    case 'addColumnContent': {
       const UID = uuidv4()
       draft.sections[action.sectionId].columns[action.columnId].contents = 
-      {...draft.sections[action.sectionId].columns[action.columnId].contents, [UID]: {id: UID, data: action.content}}
+      {...draft.sections[action.sectionId].columns[action.columnId].contents, [UID]: {id: UID, contentType: action.contentType, data: _createTextData()}}
+      break
+    }
+
+    /****************************************/
+    case 'setContentData': {
+      console.log(action)
+      draft.sections[action.sectionId].columns[action.columnId].contents[action.contentId].data = action.data
+      break
+    }
+
+    /****************************************/
+    case 'deleteContent': {
+      delete draft.sections[action.sectionId].columns[action.columnId].contents[action.contentId]
       break
     }
   }

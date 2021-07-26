@@ -16,11 +16,22 @@ export default function useField(dispatch: any){
     dispatch({type: 'setSectionDisplayType', displayType, sectionId})
   }
 
-  const addColumnData = (
-    {sectionId, columnId, content}:
-    {sectionId: any, columnId: string, content: object}
+  const addColumnContent = (
+    {sectionId, columnId, contentType}:
+    {sectionId: any, columnId: string, contentType: string}
   ) => {
-    dispatch({type: 'addColumnData', sectionId, columnId, content })
+    dispatch({type: 'addColumnContent', sectionId, columnId, contentType })
+  }
+
+  const setContentData = (
+    {sectionId, columnId, contentId, data}:
+    {sectionId: string, columnId: string, contentId: string, data: object}
+  ) => {
+    dispatch({type: 'setContentData', sectionId, columnId, contentId, data })
+  }
+
+  const deleteContent = (sectionId: string, columnId: string, contentId: string) => {
+    dispatch({type: 'deleteContent', sectionId, columnId, contentId })
   }
 
   return {
@@ -28,6 +39,8 @@ export default function useField(dispatch: any){
     addSection,
     deleteSection,
     setSectionDisplayType,
-    addColumnData
+    addColumnContent,
+    setContentData,
+    deleteContent
   }
 }
