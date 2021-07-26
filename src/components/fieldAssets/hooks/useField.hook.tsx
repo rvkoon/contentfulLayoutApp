@@ -12,9 +12,14 @@ export default function useField(dispatch: any){
     dispatch({type: 'setSectionDisplayType', displayType, sectionId})
   }
 
+  const addColumnData = (sectionIdx: any, columnIdx: string, data: object) => {
+    dispatch({type: 'addColumnData', sectionIdx, columnIdx, data })
+  }
+
   return {
-    addSection,
-    deleteSection,
-    setSectionDisplayType
+      addSection,
+      deleteSection,
+      setSectionDisplayType,
+      addColumnData
   }
 }

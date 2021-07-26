@@ -1,28 +1,31 @@
 import React from "react";
-import { GridItem, Button } from "@contentful/forma-36-react-components";
+import { GridItem, Button, Paragraph } from "@contentful/forma-36-react-components";
 import STYLES from "../../../common/styles";
 import ContentModal from "./ContentModal";
+import FieldContext from "../context/context"
 
 interface propsInterface {
-  sectionSpan: object;
-  sdk: any;
+  columnSpan: object;
+  sectionIdx: any
+  columnIdx: any
 }
 
-const CustomGridItem = ({ sectionSpan, sdk }: propsInterface) => {
+const CustomGridItem = ({ columnSpan, sectionIdx, columnIdx }: propsInterface) => {
   const [isShown, setIsShown] = React.useState(false);
   const [editIsShown, setEditIsShown] = React.useState(false);
+  const {state} = React.useContext(FieldContext)
 
-  const closeModal = () => {
+  const closeModal = React.useCallback(() => {
     setIsShown(false);
-  };
+  }, [setIsShown]);
 
   return (
-    <GridItem style={{ ...sectionSpan, minHeight: 300 }}>
+    <GridItem style={{ ...columnSpan, minHeight: 300 }}>
       <ContentModal
         isShown={isShown}
         closeModal={closeModal}
-        data={{}}
-        sdk={sdk}
+        sectionIdx={sectionIdx}
+        columnIdx={columnIdx}
       />
       <div
         style={{ ...STYLES.columnStyle, position: "relative" as "relative" }}
@@ -38,7 +41,12 @@ const CustomGridItem = ({ sectionSpan, sdk }: propsInterface) => {
             style={{ ...STYLES.editButton, position: "absolute" as "absolute" }}
           />
         )}
-      </div>
+        {state.sections[sectionIdx].columns[columnIdx].data.map((d:any) => {
+          return (
+            <Paragraph>{JSON.stringify(d)}</Paragraph>
+          )
+        })}
+        </div>
     </GridItem>
   );
 };

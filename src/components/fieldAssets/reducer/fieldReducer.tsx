@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import {produce} from 'immer'
 
 
 function _createNewSection(){
@@ -11,10 +12,12 @@ function _createNewSection(){
 
 function _createColumn(colSize: number){
   return {
+    id: uuidv4(),
     colSize,
     style: {
       gridColumn: `span ${colSize}`
-    }
+    },
+    data: []
   }
 }
 
@@ -48,23 +51,42 @@ function _fillColumnsSchema(displayType: any){
 }
 
 
-export default function sectionsReducer(state: any, action: any){
+export default function sectionsReducer(draft: any, action: any){
   switch(action.type){
-    case 'setStateFromAPI':
-      return {...action.payload}
-    case 'addSection':
-      return {...state, sections: [...state.sections, _createNewSection()]}
-    case 'deleteSection':
-      return {...state, sections: state.sections.filter((section: any) => section.id !== action.payload)}
-    case 'setSectionDisplayType':
-      const updatedSections = state.sections.map((section: any) => {
-        if(section.id === action.sectionId){
-          section.displayType = action.displayType
-          section.columns = _fillColumnsSchema(action.displayType)
-        }
-        return section
-      })
-      console.log(updatedSections)
-      return {...state, sections: updatedSections}
+    /****************************************/
+    case 'setStateFromAPI': {
+      draft.sections = action.payload.sections
+      break
+    }
+
+    /****************************************/
+    case 'addSection':{
+      draft.sections.push(_createNewSection())
+      break
+    }
+
+    /****************************************/
+    case 'deleteSection':{
+      draft.sections = draft.sections.filter((section: any) => section.id !== action.payload)
+      break
+    }
+
+    /****************************************/
+    case 'setSectionDisplayType':{
+      const selectedSectionIdx = draft.sections.findIndex((section: any) => section.id === action.sectionId)
+      draft.sections[selectedSectionIdx].displayType = action.displayType
+      draft.sections[selectedSectionIdx].columns = _fillColumnsSchema(action.displayType)
+      break
+    }
+
+    /****************************************/
+    case 'addColumnData': {
+      // const selectedSectionIdx = draft.sections.findIndex((section: any) => section.id === action.sectionId)
+      // const selectedColumnIdx = draft.sections[selectedSectionIdx].findIndex((column: any) => column.id === action.columnId)
+      draft.sections[action.sectionIdx].columns[action.columnIdx].data.push(action.data)
+      break
+    }
   }
 }
+
+export const curriedReducerFunction = produce(sectionsReducer);

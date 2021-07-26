@@ -4,12 +4,14 @@ import {
   GridItem,
   Button,
   Flex,
+  Paragraph,
 } from "@contentful/forma-36-react-components";
 import { FieldExtensionSDK } from "@contentful/app-sdk";
 import STYLES from "../common/styles";
 import CustomGridItem from "./fieldAssets/components/CustomGridItem";
-import sectionsReducer from "./fieldAssets/reducer/fieldReducer";
+import sectionsReducer, {curriedReducerFunction} from "./fieldAssets/reducer/fieldReducer";
 import useField from "./fieldAssets/hooks/useField.hook";
+import FieldContext from "./fieldAssets/context/context"
 
 interface FieldProps {
   sdk: FieldExtensionSDK;
@@ -20,12 +22,12 @@ const initialState = {
 };
 
 const Field = ({ sdk }: FieldProps) => {
-  const [state, dispatch] = React.useReducer(sectionsReducer, initialState);
-  const { addSection, deleteSection, setSectionDisplayType } =
-    useField(dispatch);
+  const [state, dispatch] = React.useReducer(curriedReducerFunction, initialState);
+  const { ...fieldActions } = useField(dispatch);
 
   React.useEffect(() => {
     if (sdk.field.getValue() !== undefined) {
+      console.log(`HELLO : ${JSON.stringify(sdk.field.getValue())}`)
       dispatch({ type: "setStateFromAPI", payload: sdk.field.getValue() });
     }
     sdk.window.startAutoResizer();
@@ -35,12 +37,18 @@ const Field = ({ sdk }: FieldProps) => {
     sdk.field.setValue(state);
   }, [state]);
 
+  const contextOptions = {
+    state,
+    fieldActions,
+    sdk
+  }
+
   return (
+    <FieldContext.Provider value={contextOptions}>
     <div style={{ minHeight: 1200 }}>
-      {state &&
-        state.sections &&
-        state.sections.length &&
-        state.sections.map((section: any, i: number) => (
+      {(state && state.sections && state.sections.length) &&
+        state.sections.map((section: any, i: number) => {
+          return(
           <>
             <Flex
               style={{ ...STYLES.gridActions }}
@@ -48,7 +56,7 @@ const Field = ({ sdk }: FieldProps) => {
             >
               <div>
                 {section.displayType ? (
-                  `Section ${i + 1}`
+                  <Paragraph>{`Section ${i + 1}`}</Paragraph>
                 ) : (
                   <>
                     <Button
@@ -56,7 +64,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        setSectionDisplayType("oneCol", section.id)
+                        fieldActions.setSectionDisplayType("oneCol", section.id)
                       }
                     >
                       1 Col
@@ -66,7 +74,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        setSectionDisplayType("fiftyFifty", section.id)
+                        fieldActions.setSectionDisplayType("fiftyFifty", section.id)
                       }
                     >
                       50/50
@@ -76,7 +84,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        setSectionDisplayType("oneThirdTwoThirds", section.id)
+                        fieldActions.setSectionDisplayType("oneThirdTwoThirds", section.id)
                       }
                     >
                       1/3 - 2/3
@@ -86,7 +94,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        setSectionDisplayType("twoThirdsOneThird", section.id)
+                        fieldActions.setSectionDisplayType("twoThirdsOneThird", section.id)
                       }
                     >
                       2/3 - 1/3
@@ -96,7 +104,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        setSectionDisplayType("threeCols", section.id)
+                        fieldActions.setSectionDisplayType("threeCols", section.id)
                       }
                     >
                       3 Cols
@@ -109,32 +117,34 @@ const Field = ({ sdk }: FieldProps) => {
                 size="small"
                 icon="Delete"
                 aria-label="Delete"
-                onClick={() => deleteSection(section.id)}
+                onClick={() => fieldActions.deleteSection(section.id)}
               />
             </Flex>
             <Grid
-              style={{ ...STYLES.gridWrapper, minHeight: 300 }}
+              style={{ ...STYLES.gridWrapper}}
               columns={"1fr 1fr 1fr 1fr 1fr 1fr"}
               rowGap="spacingS"
               columnGap="spacingS"
             >
               {section.columns &&
-                section.columns.map((column: any) => {
+                section.columns.map((column: any, j: number) => {
                   return (
-                    <CustomGridItem sectionSpan={column.style} sdk={sdk} />
+                    <CustomGridItem columnSpan={column.style} sectionIdx={i} columnIdx={j}/>
                   );
                 })}
             </Grid>
           </>
-        ))}
+        )}
+      )}
       <Button
-        onClick={addSection}
+        onClick={fieldActions.addSection}
         buttonType="muted"
         isFullWidth={true}
         icon="Plus"
         aria-label="Add"
       />
     </div>
+    </FieldContext.Provider>
   );
 };
 

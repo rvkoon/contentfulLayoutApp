@@ -1,47 +1,43 @@
 import React from "react";
 import {
   Button,
+  Paragraph,
   Modal,
-  Form,
-  FieldGroup,
-  TextField,
 } from "@contentful/forma-36-react-components";
-import { RichTextEditor } from "@contentful/field-editor-rich-text";
+import FieldContext from "../context/context"
 
 interface IContentModal {
   isShown: boolean;
   closeModal: () => void;
-  data: object;
-  sdk: any;
+  sectionIdx: any
+  columnIdx: any
 }
 
-const ContentModal = ({ isShown, closeModal, data, sdk }: IContentModal) => {
+const ContentModal = ({ isShown, closeModal, sectionIdx, columnIdx }: IContentModal) => {
+
+  const {state, fieldActions, sdk} = React.useContext(FieldContext)
+
+  console.log(state)
+
   return (
     <Modal
       title="Centered modal"
       isShown={isShown}
       onClose={() => null}
       size="fullWidth"
+      position="top"
     >
       {() => (
         <React.Fragment>
           <Modal.Header title="Content" />
           <Modal.Content>
-            <Form>
-              <RichTextEditor sdk={sdk} />
-              {/* <FieldGroup>
-                <TextField
-                  id="titleInput"
-                  name="titleInput"
-                  labelText="Title"
-                />
-              </FieldGroup>
-              <TextField
-                id="subTitleInput"
-                name="subTitleInput"
-                labelText="subTitleInput"
-              /> */}
-            </Form>
+            {/* <Button onClick={() => sdk.space.createAsset({}).then((asset: any) => sdk.navigator.openAsset(asset.sys.id, { slideIn: true }))}></Button> */}
+            {state.sections[sectionIdx].columns[columnIdx].data.map((d:any) => {
+              return (
+                <Paragraph>{JSON.stringify(d)}</Paragraph>
+              )
+            })}
+            <Button onClick={() => fieldActions.addColumnData(sectionIdx, columnIdx, {text: "Hello World"})}></Button>
           </Modal.Content>
           <Modal.Controls position="right">
             <Button buttonType="primary" onClick={closeModal}>
@@ -52,6 +48,8 @@ const ContentModal = ({ isShown, closeModal, data, sdk }: IContentModal) => {
       )}
     </Modal>
   );
+
 };
 
 export default ContentModal;
+

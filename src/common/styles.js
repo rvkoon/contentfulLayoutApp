@@ -2,11 +2,12 @@ import GLOBALS from "./globals";
 
 const STYLES = {
   gridWrapper: {
-    backgroundColor: GLOBALS.colors.lightGray,
+    backgroundColor: "#fff",
     border: `solid 1px ${GLOBALS.colors.gray}`,
-    padding: "10px",
+    padding: "16px",
     borderRadius: "0 0 6px 6px",
-    marginBottom: "20px",
+    marginBottom: "40px",
+    minHeight: 300,
   },
   gridActions: {
     backgroundColor: GLOBALS.colors.lightGray,
@@ -14,18 +15,24 @@ const STYLES = {
     borderBottom: "none",
     borderRadius: "6px 6px 0 0",
     padding: "5px",
+    display: "flex",
+    alignItems: "center",
   },
   columnStyle: {
     backgroundColor: "#fff",
-    border: "dashed 1px #67728A",
+    border: "dashed 2px #CFD9E0",
     borderRadius: "6px",
-    minHeight: "100%",
+    minHeight: "calc(100% - 20px)",
+    padding: "10px",
   },
   editButton: {
     width: "100%",
     height: "100%",
-    // left: "calc(50% - 25px)",
-    // top: "calc(50% - 25px)",
+    position: "relative",
+    top: "0",
+    left: "0",
+    backgroundColor: "rgb(207, 217, 224, 0.3)",
+    border: "none",
   },
 };
 
