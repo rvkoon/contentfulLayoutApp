@@ -16,6 +16,7 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
   const [isBold, setIsBold] = React.useState(content.data.isBold)
   const [element, setElement] = React.useState(content.data.element)
   const [text, setText] = React.useState(content.data.text)
+  const [color, setColor] = React.useState(content.data.color)
   const {fieldActions} = React.useContext(FieldContext)
 
   React.useEffect(() => {
@@ -27,24 +28,24 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
         contentId,
         data: {
           element,
-          color: "#000",
+          color,
           isBold,
           text
         }
       })
     }
-  }, [isBold, element, text])
+  }, [isBold, element, text, color])
 
   const renderText = () => {
     switch(content.data.element){
       case "p":
-        return <Paragraph>{content.data.text}</Paragraph>
+        return <Paragraph style={{color: color}}>{content.data.text}</Paragraph>
       case "h1": 
-        return <DisplayText size="huge">{content.data.text}</DisplayText>
+        return <DisplayText size="huge" style={{color: color}}>{content.data.text}</DisplayText>
       case "h2": 
-        return <DisplayText size="large">{content.data.text}</DisplayText>
+        return <DisplayText size="large" style={{color: color}}>{content.data.text}</DisplayText>
       case "h3": 
-        return <DisplayText size="default">{content.data.text}</DisplayText>
+        return <DisplayText size="default" style={{color: color}}>{content.data.text}</DisplayText>
       }
     }
 
@@ -61,6 +62,7 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
                   <ToggleButton onToggle={() => setElement("h3")} isActive={element === "h3"}>h3</ToggleButton>
                 </ToggleButton.Group>
                 <ToggleButton isActive={isBold} onToggle={() => setIsBold(!isBold)}>Bold</ToggleButton>
+                <input type="color" onChange={e => setColor(e.target.value)} value={color} style={{height: 31, borderRadius: 6, backgroundColor: "#fff"}}/>
               </Flex>
               <Button
                 buttonType="negative"
