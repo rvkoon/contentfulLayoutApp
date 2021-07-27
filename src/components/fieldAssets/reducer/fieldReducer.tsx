@@ -60,7 +60,8 @@ function _createTextData(){
     element: "p",
     color: "#000",
     isBold: false,
-    text: ""
+    text: "",
+    align: "left"
   }
 }
 

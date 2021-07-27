@@ -17,6 +17,7 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
   const [element, setElement] = React.useState(content.data.element)
   const [text, setText] = React.useState(content.data.text)
   const [color, setColor] = React.useState(content.data.color)
+  const [align, setAlign] = React.useState(content.data.align)
   const {fieldActions} = React.useContext(FieldContext)
 
   React.useEffect(() => {
@@ -30,22 +31,68 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
           element,
           color,
           isBold,
-          text
+          text,
+          align
         }
       })
     }
-  }, [isBold, element, text, color])
+  }, [isBold, element, text, color, align])
 
   const renderText = () => {
     switch(content.data.element){
       case "p":
-        return <Paragraph style={{marginBottom: 20, color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</Paragraph>
+        return (
+          <Paragraph 
+            style={{
+              marginBottom: 20,
+              color: content.data.color,
+              fontWeight: content.data.isBold ? 900 : 400,
+              textAlign: content.data.align
+            }}
+          >
+            {content.data.text}
+          </Paragraph>
+        )
       case "h1": 
-        return <DisplayText size="huge" style={{marginBottom: 20, color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
+        return (
+          <DisplayText
+            size="huge" 
+            style={{
+              marginBottom: 20,
+              color: content.data.color,
+              fontWeight: content.data.isBold ? 900 : 400,
+              textAlign: content.data.align
+            }} 
+          >
+            {content.data.text}
+          </DisplayText>
+        )
       case "h2": 
-        return <DisplayText size="large" style={{marginBottom: 20, color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
+        return (
+          <DisplayText
+            size="large"
+            style={{
+              marginBottom: 20,
+              color: content.data.color,
+              fontWeight: content.data.isBold ? 900 : 400,
+              textAlign: content.data.align
+            }} 
+          >
+            {content.data.text}
+          </DisplayText>
+        )
       case "h3": 
-        return <DisplayText size="default" style={{marginBottom: 20, color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
+        return (
+          <DisplayText
+            size="default"
+            style={{
+              marginBottom: 20,
+              color: content.data.color,
+              fontWeight: content.data.isBold ? 900 : 400,
+              textAlign: content.data.align
+            }} 
+          >{content.data.text}</DisplayText>
+        )
       }
     }
 
@@ -63,6 +110,11 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
                 </ToggleButton.Group>
                 <ToggleButton isActive={isBold} onToggle={() => setIsBold(!isBold)}>Bold</ToggleButton>
                 <input type="color" onChange={e => setColor(e.target.value)} value={color} style={{height: 31, borderRadius: 6, backgroundColor: "#fff", border: `solid 1px ${GLOBALS.colors.grayDarker}`}}/>
+                <ToggleButton.Group>
+                  <ToggleButton onToggle={() => setAlign("left")} isActive={align === "left"}>p</ToggleButton>
+                  <ToggleButton onToggle={() => setAlign("center")} isActive={align === "center"}>h1</ToggleButton>
+                  <ToggleButton onToggle={() => setAlign("right")} isActive={align === "right"}>h2</ToggleButton>
+                </ToggleButton.Group>
               </Flex>
               <Button
                 buttonType="negative"
