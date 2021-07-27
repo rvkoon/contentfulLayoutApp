@@ -4,6 +4,7 @@ import STYLES from "../../../common/styles";
 import ContentModal from "./ContentModal";
 import FieldContext from "../context/context"
 import TextContent from './TextContent'
+import MediaContent from './MediaContent'
 
 interface propsInterface {
   columnSpan: object;
@@ -29,6 +30,15 @@ const CustomGridItem = ({ columnSpan, sectionId, columnId }: propsInterface) => 
           sectionId={sectionId}
           columnId={columnId}
           contentId={content.id}
+        />
+      )
+    }else if(content.contentType === 'media'){
+      return (
+        <MediaContent 
+          sectionId={sectionId}
+          columnId={columnId}
+          content={content}
+          mode="view"
         />
       )
     }

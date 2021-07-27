@@ -36,7 +36,10 @@ const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModa
     }else if(content.contentType === 'media'){
       return (
         <MediaContent 
+          sectionId={sectionId}
+          columnId={columnId}
           content={content}
+          mode="edit"
         />
       )
     }

@@ -19,8 +19,6 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
   const [color, setColor] = React.useState(content.data.color)
   const {fieldActions} = React.useContext(FieldContext)
 
-  console.log(`MODE: ${mode}`)
-
   React.useEffect(() => {
     if(mode === "edit"){
       console.log('LA')
@@ -41,13 +39,13 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
   const renderText = () => {
     switch(content.data.element){
       case "p":
-        return <Paragraph style={{color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</Paragraph>
+        return <Paragraph style={{marginBottom: 20, color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</Paragraph>
       case "h1": 
-        return <DisplayText size="huge" style={{color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
+        return <DisplayText size="huge" style={{marginBottom: 20, color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
       case "h2": 
-        return <DisplayText size="large" style={{color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
+        return <DisplayText size="large" style={{marginBottom: 20, color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
       case "h3": 
-        return <DisplayText size="default" style={{color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
+        return <DisplayText size="default" style={{marginBottom: 20, color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
       }
     }
 
