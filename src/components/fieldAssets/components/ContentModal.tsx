@@ -1,17 +1,14 @@
 import React from "react";
 import {
   Button,
-  Paragraph,
   Modal,
   Dropdown,
   DropdownList,
-  DropdownListItem,
-  Textarea,
-  Flex,
-  ToggleButton,
+  DropdownListItem
 } from "@contentful/forma-36-react-components";
 import FieldContext from "../context/context"
 import TextContent from './TextContent'
+import MediaContent from './MediaContent'
 
 interface IContentModal {
   isShown: boolean;
@@ -36,12 +33,28 @@ const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModa
           contentId={content.id}
         />
       )
+    }else if(content.contentType === 'media'){
+      return (
+        <MediaContent 
+          content={content}
+        />
+      )
     }
   }
 
-  const addContent = () => {
+  const addTextContent = () => {
     fieldActions.addColumnContent({sectionId, columnId, contentType: "text"})
     setAddContentOpen(false)
+  }
+
+  const openMediaDialog = async () => {
+    try{
+      const media = await sdk.dialogs.selectSingleAsset()
+      fieldActions.addColumnContent({sectionId, columnId, contentType: "media", data: media})
+    }catch(e){
+      alert("Can't reach contentful API")
+    }
+    
   }
 
   return (
@@ -79,8 +92,11 @@ const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModa
               }
             >
               <DropdownList>
-                <DropdownListItem onClick={addContent}>
+                <DropdownListItem onClick={addTextContent}>
                   Add Text Element
+                </DropdownListItem>
+                <DropdownListItem onClick={openMediaDialog}>
+                  Add Existing Media
                 </DropdownListItem>
               </DropdownList>
             </Dropdown>

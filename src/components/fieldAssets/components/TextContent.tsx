@@ -19,6 +19,8 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
   const [color, setColor] = React.useState(content.data.color)
   const {fieldActions} = React.useContext(FieldContext)
 
+  console.log(`MODE: ${mode}`)
+
   React.useEffect(() => {
     if(mode === "edit"){
       console.log('LA')
@@ -39,13 +41,13 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
   const renderText = () => {
     switch(content.data.element){
       case "p":
-        return <Paragraph style={{color: color}}>{content.data.text}</Paragraph>
+        return <Paragraph style={{color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</Paragraph>
       case "h1": 
-        return <DisplayText size="huge" style={{color: color}}>{content.data.text}</DisplayText>
+        return <DisplayText size="huge" style={{color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
       case "h2": 
-        return <DisplayText size="large" style={{color: color}}>{content.data.text}</DisplayText>
+        return <DisplayText size="large" style={{color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
       case "h3": 
-        return <DisplayText size="default" style={{color: color}}>{content.data.text}</DisplayText>
+        return <DisplayText size="default" style={{color: content.data.color, fontWeight: content.data.isBold ? 900 : 400}}>{content.data.text}</DisplayText>
       }
     }
 
@@ -62,7 +64,7 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
                   <ToggleButton onToggle={() => setElement("h3")} isActive={element === "h3"}>h3</ToggleButton>
                 </ToggleButton.Group>
                 <ToggleButton isActive={isBold} onToggle={() => setIsBold(!isBold)}>Bold</ToggleButton>
-                <input type="color" onChange={e => setColor(e.target.value)} value={color} style={{height: 31, borderRadius: 6, backgroundColor: "#fff"}}/>
+                <input type="color" onChange={e => setColor(e.target.value)} value={color} style={{height: 31, borderRadius: 6, backgroundColor: "#fff", border: `solid 1px ${GLOBALS.colors.grayDarker}`}}/>
               </Flex>
               <Button
                 buttonType="negative"

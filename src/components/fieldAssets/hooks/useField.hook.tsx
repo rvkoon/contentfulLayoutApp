@@ -17,10 +17,10 @@ export default function useField(dispatch: any){
   }
 
   const addColumnContent = (
-    {sectionId, columnId, contentType}:
-    {sectionId: any, columnId: string, contentType: string}
+    {sectionId, columnId, contentType,  data = {}}:
+    {sectionId: any, columnId: string, contentType: string, data: object}
   ) => {
-    dispatch({type: 'addColumnContent', sectionId, columnId, contentType })
+    dispatch({type: 'addColumnContent', sectionId, columnId, contentType, data })
   }
 
   const setContentData = (

@@ -97,7 +97,13 @@ export default function sectionsReducer(draft: any, action: any){
     case 'addColumnContent': {
       const UID = uuidv4()
       draft.sections[action.sectionId].columns[action.columnId].contents = 
-      {...draft.sections[action.sectionId].columns[action.columnId].contents, [UID]: {id: UID, contentType: action.contentType, data: _createTextData()}}
+      {...draft.sections[action.sectionId].columns[action.columnId].contents,
+        [UID]: {
+          id: UID, 
+          contentType: action.contentType,
+          data: action.contentType === "text" ? _createTextData() : action.data ? action.data : null
+        }
+      }
       break
     }
 

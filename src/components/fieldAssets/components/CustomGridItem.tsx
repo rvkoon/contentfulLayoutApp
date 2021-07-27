@@ -1,5 +1,5 @@
 import React from "react";
-import { GridItem, Button, Paragraph } from "@contentful/forma-36-react-components";
+import { GridItem, Button } from "@contentful/forma-36-react-components";
 import STYLES from "../../../common/styles";
 import ContentModal from "./ContentModal";
 import FieldContext from "../context/context"

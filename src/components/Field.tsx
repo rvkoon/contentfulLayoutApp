@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Grid,
-  GridItem,
   Button,
   Flex,
   Paragraph,
@@ -9,7 +8,7 @@ import {
 import { FieldExtensionSDK } from "@contentful/app-sdk";
 import STYLES from "../common/styles";
 import CustomGridItem from "./fieldAssets/components/CustomGridItem";
-import sectionsReducer, {curriedReducerFunction} from "./fieldAssets/reducer/fieldReducer";
+import {curriedReducerFunction} from "./fieldAssets/reducer/fieldReducer";
 import useField from "./fieldAssets/hooks/useField.hook";
 import FieldContext from "./fieldAssets/context/context"
 

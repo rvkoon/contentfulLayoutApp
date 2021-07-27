@@ -20,7 +20,7 @@ const STYLES = {
   },
   columnStyle: {
     backgroundColor: "#fff",
-    border: "dashed 2px #CFD9E0",
+    border: "dashed 1px #CFD9E0",
     borderRadius: "6px",
     minHeight: "calc(100% - 20px)",
     padding: "10px",
@@ -31,8 +31,24 @@ const STYLES = {
     position: "relative",
     top: "0",
     left: "0",
-    backgroundColor: "rgb(207, 217, 224, 0.3)",
+    backgroundColor: "rgb(247, 249, 250, 0.95)",
     border: "none",
+  },
+  mediaContentEdit: {
+    backgroundColor: GLOBALS.colors.lightGray,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+    gap: 20,
+    overflow: "hidden",
+  },
+  mediaContentHeader: {
+    backgroundColor: "rgb(247, 249, 250, 0.95)",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: 41,
+    marginBottom: 10,
   },
 };
 
