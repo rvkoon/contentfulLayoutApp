@@ -53,11 +53,19 @@ const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModa
   const openMediaDialog = async () => {
     try{
       const media = await sdk.dialogs.selectSingleAsset()
+      setAddContentOpen(false)
       fieldActions.addColumnContent({sectionId, columnId, contentType: "media", data: media})
     }catch(e){
       alert("Can't reach contentful API")
     }
-    
+  }
+
+  const openNewMediaDialog = async () => {
+    try{
+      await sdk.navigator.openNewAsset({ slideIn: true })
+    }catch(e){
+      console.log(e)
+    }
   }
 
   return (
@@ -100,6 +108,9 @@ const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModa
                 </DropdownListItem>
                 <DropdownListItem onClick={openMediaDialog}>
                   Add Existing Media
+                </DropdownListItem>
+                <DropdownListItem onClick={openNewMediaDialog}>
+                  Add New Media
                 </DropdownListItem>
               </DropdownList>
             </Dropdown>

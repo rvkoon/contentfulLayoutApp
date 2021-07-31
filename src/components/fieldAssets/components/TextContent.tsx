@@ -19,6 +19,7 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
   const [color, setColor] = React.useState(content.data.color)
   const [align, setAlign] = React.useState(content.data.align)
   const {fieldActions} = React.useContext(FieldContext)
+  const textRef = React.useRef<null | HTMLTextAreaElement>(null)
 
   React.useEffect(() => {
     if(mode === "edit"){
@@ -37,6 +38,20 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
       })
     }
   }, [isBold, element, text, color, align])
+
+  const adjustTextareaHeight = (target: EventTarget) => {
+    //@ts-ignore
+    target.style.height = 0
+    //@ts-ignore
+    target.style.height = `${target.scrollHeight}px`
+  }
+
+  React.useEffect(() => {
+    if(textRef.current){
+      adjustTextareaHeight(textRef.current)
+
+    }
+  }, [textRef])
 
   const renderText = () => {
     switch(content.data.element){
@@ -124,7 +139,7 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
                 onClick={() => fieldActions.deleteContent(sectionId, columnId, content.id)}
               />
             </Flex>
-            <Textarea name="someInput" id="someInput" value={text} onChange={e => setText(e.target.value)}/>
+            <Textarea name="someInput" id="someInput" value={text} onChange={e => setText(e.target.value)} textareaRef={textRef} onKeyDown={e => adjustTextareaHeight(e.target)}/>
           </Flex>
         }
         {mode === "view" && renderText()}
