@@ -26,7 +26,6 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
 
   React.useEffect(() => {
     if(mode === "edit"){
-      console.log('LA')
       fieldActions.setContentData({
         sectionId,
         columnId,

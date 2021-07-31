@@ -47,7 +47,6 @@ const Field = ({ sdk }: FieldProps) => {
     <div style={{ minHeight: 1200 }}>
       {(state && state.sections) &&
         Object.values(state.sections).map((section: any, i: number) => {
-          console.log(section)
           return(
           <>
             <Flex

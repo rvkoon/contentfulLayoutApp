@@ -110,7 +110,6 @@ export default function sectionsReducer(draft: any, action: any){
 
     /****************************************/
     case 'setContentData': {
-      console.log(action)
       draft.sections[action.sectionId].columns[action.columnId].contents[action.contentId].data = action.data
       break
     }
