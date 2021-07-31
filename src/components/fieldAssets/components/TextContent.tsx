@@ -1,7 +1,10 @@
 import React from "react"
-import { Button, DisplayText, Flex, Paragraph, Textarea, ToggleButton } from "@contentful/forma-36-react-components"
+import { Button, DisplayText, Flex, Paragraph, Textarea, ToggleButton, Icon } from "@contentful/forma-36-react-components"
 import GLOBALS from "../../../common/globals"
 import FieldContext from "../context/context"
+import left from "../images/alignIcons/left.svg"
+import center from "../images/alignIcons/center.svg"
+import right from "../images/alignIcons/right.svg"
 
 interface ITextContentProps {
   sectionId: any
@@ -118,17 +121,53 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
             <Flex justifyContent="space-between" style={{marginBottom: 10, gap: 20}}>
               <Flex style={{gap: 20}}>
                 <ToggleButton.Group>
-                  <ToggleButton onToggle={() => setElement("p")} isActive={element === "p"}>p</ToggleButton>
-                  <ToggleButton onToggle={() => setElement("h1")} isActive={element === "h1"}>h1</ToggleButton>
-                  <ToggleButton onToggle={() => setElement("h2")} isActive={element === "h2"}>h2</ToggleButton>
-                  <ToggleButton onToggle={() => setElement("h3")} isActive={element === "h3"}>h3</ToggleButton>
+                  <ToggleButton onToggle={() => setElement("p")} isActive={element === "p"}>
+                    <Icon
+                      icon={"Text"}
+                      color="muted"
+                      size="small"
+                    />
+                  </ToggleButton>
+                  <ToggleButton onToggle={() => setElement("h1")} isActive={element === "h1"}>
+                    <Icon
+                      icon={"HeadingOne"}
+                      color="muted"
+                      size="small"
+                    />
+                  </ToggleButton>
+                  <ToggleButton onToggle={() => setElement("h2")} isActive={element === "h2"}>
+                    <Icon
+                      icon={"HeadingTwo"}
+                      color="muted"
+                      size="small"
+                    />
+                  </ToggleButton>
+                  <ToggleButton onToggle={() => setElement("h3")} isActive={element === "h3"}>
+                    <Icon
+                      icon={"Heading"}
+                      color="muted"
+                      size="small"
+                    />
+                  </ToggleButton>
                 </ToggleButton.Group>
-                <ToggleButton isActive={isBold} onToggle={() => setIsBold(!isBold)}>Bold</ToggleButton>
+                <ToggleButton isActive={isBold} onToggle={() => setIsBold(!isBold)}>
+                  <Icon
+                      icon={"FormatBold"}
+                      color="muted"
+                      size="small"
+                    />
+                </ToggleButton>
                 <input type="color" onChange={e => setColor(e.target.value)} value={color} style={{height: 31, borderRadius: 6, backgroundColor: "#fff", border: `solid 1px ${GLOBALS.colors.grayDarker}`}}/>
                 <ToggleButton.Group>
-                  <ToggleButton onToggle={() => setAlign("left")} isActive={align === "left"}>p</ToggleButton>
-                  <ToggleButton onToggle={() => setAlign("center")} isActive={align === "center"}>h1</ToggleButton>
-                  <ToggleButton onToggle={() => setAlign("right")} isActive={align === "right"}>h2</ToggleButton>
+                  <ToggleButton onToggle={() => setAlign("left")} isActive={align === "left"}>
+                    <img src={left} height="12"/>
+                  </ToggleButton>
+                  <ToggleButton onToggle={() => setAlign("center")} isActive={align === "center"}>
+                    <img src={center} height="12"/>
+                  </ToggleButton>
+                  <ToggleButton onToggle={() => setAlign("right")} isActive={align === "right"}>
+                    <img src={right} height="12"/>
+                  </ToggleButton>
                 </ToggleButton.Group>
               </Flex>
               <Button

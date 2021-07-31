@@ -12,7 +12,7 @@ interface IMediaContentProps {
 
 const MediaContent = ({sectionId, columnId, content, mode}: IMediaContentProps) => {
 
-  const {state, fieldActions, sdk} = React.useContext(FieldContext)
+  const {fieldActions} = React.useContext(FieldContext)
 
   if(mode === 'edit'){
     return (
@@ -39,14 +39,6 @@ const MediaContent = ({sectionId, columnId, content, mode}: IMediaContentProps) 
             >
               {content.data.fields.file['en-US'].fileName}
             </Paragraph>
-            <Button
-              buttonType="muted"
-              size="small"
-              icon="Edit"
-              aria-label="Edit"
-              onClick={() => {}}
-              style={{marginRight: 10}}
-            />  
           </Flex>
           <div>
             <Button
