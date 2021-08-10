@@ -13,32 +13,33 @@ import MediaContent from './MediaContent'
 interface IContentModal {
   isShown: boolean;
   closeModal: () => void;
-  sectionId: any
-  columnId: any
+  sectionIdx: number
+  columnIdx: number
 }
 
-const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModal) => {
+const ContentModal = ({ isShown, closeModal, sectionIdx, columnIdx }: IContentModal) => {
 
   const {state, fieldActions, sdk} = React.useContext(FieldContext)
   const [isAddContentOpen, setAddContentOpen] = React.useState(false);
 
-  const renderContent = (content: any) => {
+  const renderContent = (content: any, i: number) => {
     if(content.contentType === 'text'){
       return (
         <TextContent
           content={content}
           mode="edit"
-          sectionId={sectionId}
-          columnId={columnId}
-          contentId={content.id}
+          sectionIdx={sectionIdx}
+          columnIdx={columnIdx}
+          contentIdx={i}
         />
       )
     }else if(content.contentType === 'media'){
       return (
         <MediaContent 
-          sectionId={sectionId}
-          columnId={columnId}
+          sectionIdx={sectionIdx}
+          columnIdx={columnIdx}
           content={content}
+          contentIdx={i}
           mode="edit"
         />
       )
@@ -46,7 +47,7 @@ const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModa
   }
 
   const addTextContent = () => {
-    fieldActions.addColumnContent({sectionId, columnId, contentType: "text"})
+    fieldActions.addColumnContent({sectionIdx, columnIdx, contentType: "text"})
     setAddContentOpen(false)
   }
 
@@ -54,7 +55,7 @@ const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModa
     try{
       const media = await sdk.dialogs.selectSingleAsset()
       setAddContentOpen(false)
-      fieldActions.addColumnContent({sectionId, columnId, contentType: "media", data: media})
+      fieldActions.addColumnContent({sectionIdx, columnIdx, contentType: "media", data: media})
     }catch(e){
       alert("Can't reach contentful API")
     }
@@ -81,8 +82,8 @@ const ContentModal = ({ isShown, closeModal, sectionId, columnId }: IContentModa
           <Modal.Header title="Content" />
           <Modal.Content>
             {/* <Button onClick={() => sdk.space.createAsset({}).then((asset: any) => sdk.navigator.openAsset(asset.sys.id, { slideIn: true }))}></Button> */}
-            {Object.values(state.sections[sectionId].columns[columnId].contents).map((content:any) => {
-              return renderContent(content)
+            {state.sections[sectionIdx].columns[columnIdx].contents.map((content:any, i:number) => {
+              return renderContent(content, i)
             })}
             <Dropdown
               isOpen={isAddContentOpen}

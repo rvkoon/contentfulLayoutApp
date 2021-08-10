@@ -8,30 +8,34 @@ export default function useField(dispatch: any){
     dispatch({type: 'addSection'})
   }
 
-  const deleteSection = (sectionId: number) => {
-    dispatch({type: 'deleteSection', sectionId})
+  const deleteSection = (sectionIdx: number) => {
+    dispatch({type: 'deleteSection', sectionIdx})
   }
 
-  const setSectionDisplayType = (displayType: string, sectionId: any) => {
-    dispatch({type: 'setSectionDisplayType', displayType, sectionId})
+  const setSectionDisplayType = (displayType: string, sectionIdx: number) => {
+    dispatch({type: 'setSectionDisplayType', displayType, sectionIdx})
   }
 
   const addColumnContent = (
-    {sectionId, columnId, contentType,  data = {}}:
-    {sectionId: any, columnId: string, contentType: string, data: object}
+    {sectionIdx, columnIdx, contentType,  data = {}}:
+    {sectionIdx: number, columnIdx: number, contentType: string, data: object}
   ) => {
-    dispatch({type: 'addColumnContent', sectionId, columnId, contentType, data })
+    dispatch({type: 'addColumnContent', sectionIdx, columnIdx, contentType, data })
   }
 
   const setContentData = (
-    {sectionId, columnId, contentId, data}:
-    {sectionId: string, columnId: string, contentId: string, data: object}
+    {sectionIdx, columnIdx, contentIdx, data}:
+    {sectionIdx: number, columnIdx: number, contentIdx: number, data: object}
   ) => {
-    dispatch({type: 'setContentData', sectionId, columnId, contentId, data })
+    dispatch({type: 'setContentData', sectionIdx, columnIdx, contentIdx, data })
   }
 
-  const deleteContent = (sectionId: string, columnId: string, contentId: string) => {
-    dispatch({type: 'deleteContent', sectionId, columnId, contentId })
+  const deleteContent = (sectionIdx: number, columnIdx: number, contentIdx: number) => {
+    dispatch({type: 'deleteContent', sectionIdx, columnIdx, contentIdx })
+  }
+
+  const setSiteConfig = (siteConfig: any) => {
+    dispatch({type: 'setSiteConfig', siteConfig})
   }
 
   return {
@@ -41,6 +45,7 @@ export default function useField(dispatch: any){
     setSectionDisplayType,
     addColumnContent,
     setContentData,
-    deleteContent
+    deleteContent,
+    setSiteConfig
   }
 }

@@ -2,54 +2,47 @@ import { v4 as uuidv4 } from 'uuid';
 import {produce} from 'immer'
 
 
-function _createNewSection(UID: string){
+function _createNewSection(){
   return {
-    id: UID,
-    columns: {},
+    columns: [],
     displayType: null
   }
 }
 
-function _createColumn(UID: string, colSize: number){
+function _createColumn(colSize: number){
   return {
-    id: UID,
     colSize,
     style: {
       gridColumn: `span ${colSize}`
     },
-    contents: {}
+    contents: []
   }
-}
-
-function _addColumn(newColumns: any, span: number){
-  const UID = uuidv4()
-  return {...newColumns, [UID]: _createColumn(UID, span)}
 }
 
 function _fillColumnsSchema(displayType: any){
 
-  let newColumns = {}
+  let newColumns = []
 
   switch(displayType){
     case 'oneCol':
-      newColumns = _addColumn(newColumns, 6)
+      newColumns.push(_createColumn(6))
       return newColumns
     case 'fiftyFifty':
       for(let i = 0; i<2; i++){
-        newColumns = _addColumn(newColumns, 3)
+        newColumns.push(_createColumn(3))
       }
       return newColumns
     case 'oneThirdTwoThirds':
-      newColumns = _addColumn(newColumns, 2)
-      newColumns = _addColumn(newColumns, 4)
+      newColumns.push(_createColumn(2))
+      newColumns.push(_createColumn(4))
       return newColumns
     case 'twoThirdsOneThird':
-      newColumns = _addColumn(newColumns, 4)
-      newColumns = _addColumn(newColumns, 2)
+      newColumns.push(_createColumn(4))
+      newColumns.push(_createColumn(2))
       return newColumns
     case 'threeCols':
       for(let i = 0; i<3; i++){
-        newColumns = _addColumn(newColumns, 2)
+        newColumns.push(_createColumn(2))
       }
       return newColumns
   }
@@ -76,47 +69,46 @@ export default function sectionsReducer(draft: any, action: any){
 
     /****************************************/
     case 'addSection':{
-      const UID = uuidv4()
-      draft.sections[UID] = _createNewSection(UID)
+      draft.sections.push(_createNewSection())
       break
     }
 
     /****************************************/
     case 'deleteSection':{
-      delete draft.sections[action.sectionId]
+      draft.sections.splice(action.sectionIdx, 1)
       break
     }
 
     /****************************************/
     case 'setSectionDisplayType':{
-      draft.sections[action.sectionId].displayType = action.displayType
-      draft.sections[action.sectionId].columns = _fillColumnsSchema(action.displayType)
+      draft.sections[action.sectionIdx].displayType = action.displayType
+      draft.sections[action.sectionIdx].columns = _fillColumnsSchema(action.displayType)
       break
     }
 
     /****************************************/
     case 'addColumnContent': {
-      const UID = uuidv4()
-      draft.sections[action.sectionId].columns[action.columnId].contents = 
-      {...draft.sections[action.sectionId].columns[action.columnId].contents,
-        [UID]: {
-          id: UID, 
-          contentType: action.contentType,
-          data: action.contentType === "text" ? _createTextData() : action.data ? action.data : null
-        }
-      }
+      draft.sections[action.sectionIdx].columns[action.columnIdx].contents.push({
+        contentType: action.contentType,
+        data: action.contentType === "text" ? _createTextData() : action.data ? action.data : null
+      })
       break
     }
 
     /****************************************/
     case 'setContentData': {
-      draft.sections[action.sectionId].columns[action.columnId].contents[action.contentId].data = action.data
+      draft.sections[action.sectionIdx].columns[action.columnIdx].contents[action.contentIdx].data = action.data
       break
     }
 
     /****************************************/
     case 'deleteContent': {
-      delete draft.sections[action.sectionId].columns[action.columnId].contents[action.contentId]
+      draft.sections[action.sectionIdx].columns[action.columnIdx].contents.splice(action.contentIdx, 1)
+      break
+    }
+
+    case 'setSiteConfig': {
+      draft.siteConfig = action.siteConfig
       break
     }
   }

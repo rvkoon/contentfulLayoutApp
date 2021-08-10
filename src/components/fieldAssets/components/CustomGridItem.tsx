@@ -8,11 +8,11 @@ import MediaContent from './MediaContent'
 
 interface propsInterface {
   columnSpan: object;
-  sectionId: any
-  columnId: any
+  sectionIdx: number
+  columnIdx: number
 }
 
-const CustomGridItem = ({ columnSpan, sectionId, columnId }: propsInterface) => {
+const CustomGridItem = ({ columnSpan, sectionIdx, columnIdx }: propsInterface) => {
   const [isShown, setIsShown] = React.useState(false);
   const [editIsShown, setEditIsShown] = React.useState(false);
   const {state} = React.useContext(FieldContext)
@@ -21,22 +21,23 @@ const CustomGridItem = ({ columnSpan, sectionId, columnId }: propsInterface) => 
     setIsShown(false);
   }, [setIsShown]);
 
-  const renderContent = (content: any) => {
+  const renderContent = (content: any, i: number) => {
     if(content.contentType === 'text'){
       return (
         <TextContent
           content={content}
           mode="view"           
-          sectionId={sectionId}
-          columnId={columnId}
-          contentId={content.id}
+          sectionIdx={sectionIdx}
+          columnIdx={columnIdx}
+          contentIdx={i}
         />
       )
     }else if(content.contentType === 'media'){
       return (
         <MediaContent 
-          sectionId={sectionId}
-          columnId={columnId}
+          sectionIdx={sectionIdx}
+          columnIdx={columnIdx}
+          contentIdx={i}
           content={content}
           mode="view"
         />
@@ -49,8 +50,8 @@ const CustomGridItem = ({ columnSpan, sectionId, columnId }: propsInterface) => 
       <ContentModal
         isShown={isShown}
         closeModal={closeModal}
-        sectionId={sectionId}
-        columnId={columnId}
+        sectionIdx={sectionIdx}
+        columnIdx={columnIdx}
       />
       <div
         style={{ ...STYLES.columnStyle, position: "relative" as "relative" }}
@@ -66,9 +67,9 @@ const CustomGridItem = ({ columnSpan, sectionId, columnId }: propsInterface) => 
             style={{ ...STYLES.editButton, position: "absolute" as "absolute" }}
           />
         )}
-        {Object.values(state.sections[sectionId].columns[columnId].contents).map((content:any) => {
+        {state.sections[sectionIdx].columns[columnIdx].contents.map((content:any, i:number) => {
           return (
-            renderContent(content)
+            renderContent(content, i)
           )
         })}
         </div>

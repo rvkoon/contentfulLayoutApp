@@ -7,29 +7,29 @@ import center from "../images/alignIcons/center.svg"
 import right from "../images/alignIcons/right.svg"
 
 interface ITextContentProps {
-  sectionId: any
-  columnId:any
-  contentId: any
+  sectionIdx: number
+  columnIdx:number
+  contentIdx: number
   content: any
   mode: string
 }
 
-const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextContentProps) => {
+const TextContent = ({sectionIdx, columnIdx, contentIdx, content, mode}: ITextContentProps) => {
 
   const [isBold, setIsBold] = React.useState(content.data.isBold)
   const [element, setElement] = React.useState(content.data.element)
   const [text, setText] = React.useState(content.data.text)
   const [color, setColor] = React.useState(content.data.color)
   const [align, setAlign] = React.useState(content.data.align)
-  const {fieldActions} = React.useContext(FieldContext)
+  const {state, fieldActions} = React.useContext(FieldContext)
   const textRef = React.useRef<null | HTMLTextAreaElement>(null)
 
   React.useEffect(() => {
     if(mode === "edit"){
       fieldActions.setContentData({
-        sectionId,
-        columnId,
-        contentId,
+        sectionIdx,
+        columnIdx,
+        contentIdx,
         data: {
           element,
           color,
@@ -51,7 +51,6 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
   React.useEffect(() => {
     if(textRef.current){
       adjustTextareaHeight(textRef.current)
-
     }
   }, [textRef])
 
@@ -129,21 +128,21 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
                   </ToggleButton>
                   <ToggleButton onToggle={() => setElement("h1")} isActive={element === "h1"}>
                     <Icon
-                      icon={"HeadingOne"}
+                      icon={"Heading"}
                       color="muted"
                       size="small"
                     />
                   </ToggleButton>
                   <ToggleButton onToggle={() => setElement("h2")} isActive={element === "h2"}>
                     <Icon
-                      icon={"HeadingTwo"}
+                      icon={"HeadingOne"}
                       color="muted"
                       size="small"
                     />
                   </ToggleButton>
                   <ToggleButton onToggle={() => setElement("h3")} isActive={element === "h3"}>
                     <Icon
-                      icon={"Heading"}
+                      icon={"HeadingTwo"}
                       color="muted"
                       size="small"
                     />
@@ -156,7 +155,13 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
                       size="small"
                     />
                 </ToggleButton>
-                <input type="color" onChange={e => setColor(e.target.value)} value={color} style={{height: 31, borderRadius: 6, backgroundColor: "#fff", border: `solid 1px ${GLOBALS.colors.grayDarker}`}}/>
+                <div style={{display: "flex"}}>
+                  <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 2,  marginRight: 5}}>
+                    <Button style={{display: "block", border: "none", width: 31, height: 14, backgroundColor: state.siteConfig.primaryColor}} onClick={() => setColor(state.siteConfig.primaryColor)}/>
+                    <Button style={{display: "block", border: "none", width: 31, height: 14, backgroundColor: state.siteConfig.secondaryColor}} onClick={() => setColor(state.siteConfig.secondaryColor)}/>
+                  </div>
+                  <input type="color" onChange={e => setColor(e.target.value)} value={color} style={{height: 31, borderRadius: 6, backgroundColor: "#fff", border: `solid 1px ${GLOBALS.colors.grayDarker}`}}/>
+                </div>
                 <ToggleButton.Group>
                   <ToggleButton onToggle={() => setAlign("left")} isActive={align === "left"}>
                     <img src={left} height="12"/>
@@ -174,7 +179,7 @@ const TextContent = ({sectionId, columnId, contentId, content, mode}: ITextConte
                 size="small"
                 icon="Delete"
                 aria-label="Delete"
-                onClick={() => fieldActions.deleteContent(sectionId, columnId, content.id)}
+                onClick={() => fieldActions.deleteContent(sectionIdx, columnIdx, contentIdx)}
               />
             </Flex>
             <Textarea name="someInput" id="someInput" value={text} onChange={e => setText(e.target.value)} textareaRef={textRef} onKeyDown={e => adjustTextareaHeight(e.target)}/>

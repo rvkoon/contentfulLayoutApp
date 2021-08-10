@@ -17,7 +17,8 @@ interface FieldProps {
 }
 
 const initialState = {
-  sections: {},
+  sections: [],
+  siteConfig: {}
 };
 
 const Field = ({ sdk }: FieldProps) => {
@@ -29,11 +30,15 @@ const Field = ({ sdk }: FieldProps) => {
     if (sdk.field.getValue() !== undefined) {
       fieldActions.setStateFromAPI(sdk.field.getValue());
     }
+    sdk.space.getEntry("Tp3zkjjR9r709Zpvshwf7").then((res: any) => {
+      fieldActions.setSiteConfig({primaryColor: res.fields.primaryColor['en-US'], secondaryColor: res.fields.secondaryColor['en-US'] })
+    })
     sdk.window.startAutoResizer();
   }, []);
 
   React.useEffect(() => {
     sdk.field.setValue(state);
+    console.log(state)
   }, [state]);
 
   const context = {
@@ -45,8 +50,8 @@ const Field = ({ sdk }: FieldProps) => {
   return (
     <FieldContext.Provider value={context}>
     <div style={{ minHeight: 1200 }}>
-      {(state && state.sections) &&
-        Object.values(state.sections).map((section: any, i: number) => {
+      {(state && state.sections && state.sections.length) &&
+        state.sections.map((section: any, i: number) => {
           return(
           <>
             <Flex
@@ -63,7 +68,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        fieldActions.setSectionDisplayType("oneCol", section.id)
+                        fieldActions.setSectionDisplayType("oneCol", i)
                       }
                     >
                       1 Col
@@ -73,7 +78,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        fieldActions.setSectionDisplayType("fiftyFifty", section.id)
+                        fieldActions.setSectionDisplayType("fiftyFifty", i)
                       }
                     >
                       50/50
@@ -83,7 +88,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        fieldActions.setSectionDisplayType("oneThirdTwoThirds", section.id)
+                        fieldActions.setSectionDisplayType("oneThirdTwoThirds", i)
                       }
                     >
                       1/3 - 2/3
@@ -93,7 +98,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        fieldActions.setSectionDisplayType("twoThirdsOneThird", section.id)
+                        fieldActions.setSectionDisplayType("twoThirdsOneThird", i)
                       }
                     >
                       2/3 - 1/3
@@ -103,7 +108,7 @@ const Field = ({ sdk }: FieldProps) => {
                       size="small"
                       style={{ width: 100, marginRight: 10 }}
                       onClick={() =>
-                        fieldActions.setSectionDisplayType("threeCols", section.id)
+                        fieldActions.setSectionDisplayType("threeCols", i)
                       }
                     >
                       3 Cols
@@ -116,7 +121,7 @@ const Field = ({ sdk }: FieldProps) => {
                 size="small"
                 icon="Delete"
                 aria-label="Delete"
-                onClick={() => fieldActions.deleteSection(section.id)}
+                onClick={() => fieldActions.deleteSection(i)}
               />
             </Flex>
             <Grid
@@ -126,9 +131,9 @@ const Field = ({ sdk }: FieldProps) => {
               columnGap="spacingS"
             >
               {section.columns &&
-                Object.values(section.columns).map((column: any, j: number) => {
+                section.columns.map((column: any, j: number) => {
                   return (
-                    <CustomGridItem columnSpan={column.style} sectionId={section.id} columnId={column.id}/>
+                    <CustomGridItem columnSpan={column.style} sectionIdx={i} columnIdx={j}/>
                   );
                 })}
             </Grid>

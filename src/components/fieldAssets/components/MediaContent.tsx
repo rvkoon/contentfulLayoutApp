@@ -4,13 +4,14 @@ import STYLES from "../../../common/styles"
 import FieldContext from "../context/context"
 
 interface IMediaContentProps {
-  sectionId: string
-  columnId: string
+  sectionIdx: number
+  columnIdx: number
+  contentIdx: number
   content: any
   mode: string
 }
 
-const MediaContent = ({sectionId, columnId, content, mode}: IMediaContentProps) => {
+const MediaContent = ({sectionIdx, columnIdx, contentIdx, content, mode}: IMediaContentProps) => {
 
   const {fieldActions} = React.useContext(FieldContext)
 
@@ -46,7 +47,7 @@ const MediaContent = ({sectionId, columnId, content, mode}: IMediaContentProps) 
               size="small"
               icon="Delete"
               aria-label="Delete"
-              onClick={() => fieldActions.deleteContent(sectionId, columnId, content.id)}
+              onClick={() => fieldActions.deleteContent(sectionIdx, columnIdx, contentIdx)}
             />
           </div>
         </Flex>
@@ -58,7 +59,7 @@ const MediaContent = ({sectionId, columnId, content, mode}: IMediaContentProps) 
     )
   }else if(mode === "view"){
     return(
-      <img src={`https:${content.data.fields.file['en-US'].url}`} alt="" style={{borderRadius: 6, maxWidth: "100%", objectFit: "cover", marginBottom: 20}}/>
+      <img src={`https:${content.data.fields.file['en-US'].url}`} alt="" style={{borderRadius: 6, minWidth: "100%", maxWidth: "100%", objectFit: "cover", marginBottom: 20}}/>
     )
   }
 
