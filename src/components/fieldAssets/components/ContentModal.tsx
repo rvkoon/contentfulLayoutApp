@@ -31,6 +31,7 @@ const ContentModal = ({ isShown, closeModal, sectionIdx, columnIdx }: IContentMo
           sectionIdx={sectionIdx}
           columnIdx={columnIdx}
           contentIdx={i}
+          key={i}
         />
       )
     }else if(content.contentType === 'media'){
@@ -41,6 +42,7 @@ const ContentModal = ({ isShown, closeModal, sectionIdx, columnIdx }: IContentMo
           content={content}
           contentIdx={i}
           mode="edit"
+          key={i}
         />
       )
     }
@@ -69,6 +71,10 @@ const ContentModal = ({ isShown, closeModal, sectionIdx, columnIdx }: IContentMo
     }
   }
 
+  React.useEffect(() => {
+    console.log(state.sections[sectionIdx].columns[columnIdx].contents)
+  }, [state.sections[sectionIdx].columns[columnIdx].contents])
+
   return (
     <Modal
       title="Centered modal"
@@ -81,10 +87,9 @@ const ContentModal = ({ isShown, closeModal, sectionIdx, columnIdx }: IContentMo
         <React.Fragment>
           <Modal.Header title="Content" />
           <Modal.Content>
-            {/* <Button onClick={() => sdk.space.createAsset({}).then((asset: any) => sdk.navigator.openAsset(asset.sys.id, { slideIn: true }))}></Button> */}
-            {state.sections[sectionIdx].columns[columnIdx].contents.map((content:any, i:number) => {
-              return renderContent(content, i)
-            })}
+          {state.sections[sectionIdx].columns[columnIdx].contents.map((content:any, i:number) => {
+            return renderContent(content, i)
+          })}
             <Dropdown
               isOpen={isAddContentOpen}
               onClose={() => setAddContentOpen(false)}

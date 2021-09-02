@@ -80,6 +80,63 @@ export default function sectionsReducer(draft: any, action: any){
     }
 
     /****************************************/
+    case 'changeSectionOrder':{
+      if(
+        typeof action.sectionIdx === null || 
+        typeof action.sectionIdx === undefined ||
+        typeof action.direction === null || 
+        typeof action.direction === undefined
+      ){
+        break
+      }
+      
+      
+      if(action.direction === 'up'){
+        if(action.sectionIdx > 0){
+          const currentItem = draft.sections.splice(action.sectionIdx, 1)[0]
+          draft.sections.splice(action.sectionIdx - 1, 0, currentItem)
+        }
+      }else if(action.direction === 'down'){
+        if(action.sectionIdx < (draft.sections.length - 1)){
+          const currentItem = draft.sections.splice(action.sectionIdx, 1)[0]
+          draft.sections.splice(action.sectionIdx + 1, 0, currentItem)
+        }
+      }
+      break
+    }
+
+    /****************************************/
+    case 'changeContentOrder':{
+      if(
+        typeof action.sectionIdx === null || 
+        typeof action.sectionIdx === undefined ||
+        typeof action.columnIdx === null || 
+        typeof action.columnIdx === undefined ||
+        typeof action.contentIdx === null || 
+        typeof action.contentIdx === undefined ||
+        typeof action.direction === null || 
+        typeof action.direction === undefined
+      ){
+        break
+      }
+
+      const sectionAndColumn = draft.sections[action.sectionIdx].columns[action.columnIdx]
+      
+      if(action.direction === 'up'){
+        if(action.contentIdx > 0){
+          const currentItem = sectionAndColumn.contents.splice(action.contentIdx, 1)[0]
+          sectionAndColumn.contents.splice(action.contentIdx - 1, 0, currentItem)
+        }
+      }else if(action.direction === 'down'){
+        if(action.contentIdx < (draft.sections.length - 1)){
+          const currentItem = sectionAndColumn.contents.splice(action.contentIdx, 1)[0]
+          sectionAndColumn.contents.splice(action.contentIdx + 1, 0, currentItem)
+        }
+      }
+      break
+    }
+
+    /****************************************/
     case 'setSectionDisplayType':{
       draft.sections[action.sectionIdx].displayType = action.displayType
       draft.sections[action.sectionIdx].columns = _fillColumnsSchema(action.displayType)

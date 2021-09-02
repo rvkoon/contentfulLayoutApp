@@ -12,6 +12,14 @@ export default function useField(dispatch: any){
     dispatch({type: 'deleteSection', sectionIdx})
   }
 
+  const changeSectionOrder = (sectionIdx: number, direction: string) => {
+    dispatch({type: 'changeSectionOrder', sectionIdx, direction})
+  }
+
+  const changeContentOrder = (sectionIdx: number, columnIdx: number, contentIdx: number, direction: string) => {
+    dispatch({type: 'changeContentOrder', sectionIdx, columnIdx, contentIdx, direction})
+  }
+
   const setSectionDisplayType = (displayType: string, sectionIdx: number) => {
     dispatch({type: 'setSectionDisplayType', displayType, sectionIdx})
   }
@@ -46,6 +54,8 @@ export default function useField(dispatch: any){
     addColumnContent,
     setContentData,
     deleteContent,
-    setSiteConfig
+    setSiteConfig,
+    changeSectionOrder,
+    changeContentOrder
   }
 }

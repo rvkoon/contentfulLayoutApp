@@ -50,6 +50,10 @@ const STYLES = {
     height: 41,
     marginBottom: 10,
   },
+  sectionBtns: {
+    display: "flex",
+    gap: "5px",
+  },
 };
 
 export default STYLES;

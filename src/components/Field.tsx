@@ -31,7 +31,7 @@ const Field = ({ sdk }: FieldProps) => {
       fieldActions.setStateFromAPI(sdk.field.getValue());
     }
     sdk.space.getEntry("Tp3zkjjR9r709Zpvshwf7").then((res: any) => {
-      fieldActions.setSiteConfig({primaryColor: res.fields.primaryColor['en-US'], secondaryColor: res.fields.secondaryColor['en-US'] })
+      fieldActions.setSiteConfig({primaryColor: res.fields.primaryColor['en-US'], primaryColorDark: res.fields.primaryColorDark['en-US'], secondaryColor: res.fields.secondaryColor['en-US'] })
     })
     sdk.window.startAutoResizer();
   }, []);
@@ -53,7 +53,7 @@ const Field = ({ sdk }: FieldProps) => {
       {(state && state.sections && state.sections.length) &&
         state.sections.map((section: any, i: number) => {
           return(
-          <>
+          <div key={i}>
             <Flex
               style={{ ...STYLES.gridActions }}
               justifyContent="space-between"
@@ -116,13 +116,29 @@ const Field = ({ sdk }: FieldProps) => {
                   </>
                 )}
               </div>
-              <Button
-                buttonType="negative"
-                size="small"
-                icon="Delete"
-                aria-label="Delete"
-                onClick={() => fieldActions.deleteSection(i)}
-              />
+              <div style={{...STYLES.sectionBtns}}>
+                <Button
+                  buttonType="muted"
+                  size="small"
+                  icon="ArrowUp"
+                  aria-label="Delete"
+                  onClick={() => fieldActions.changeSectionOrder(i, 'up')}
+                />
+                <Button
+                  buttonType="muted"
+                  size="small"
+                  icon="ArrowDown"
+                  aria-label="Delete"
+                  onClick={() => fieldActions.changeSectionOrder(i, 'down')}
+                />
+                <Button
+                  buttonType="negative"
+                  size="small"
+                  icon="Delete"
+                  aria-label="Delete"
+                  onClick={() => fieldActions.deleteSection(i)}
+                />
+              </div>
             </Flex>
             <Grid
               style={{ ...STYLES.gridWrapper}}
@@ -133,11 +149,11 @@ const Field = ({ sdk }: FieldProps) => {
               {section.columns &&
                 section.columns.map((column: any, j: number) => {
                   return (
-                    <CustomGridItem columnSpan={column.style} sectionIdx={i} columnIdx={j}/>
+                    <CustomGridItem columnSpan={column.style} sectionIdx={i} columnIdx={j} key={j}/>
                   );
                 })}
             </Grid>
-          </>
+          </div>
         )}
       )}
       <Button

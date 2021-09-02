@@ -30,6 +30,7 @@ const CustomGridItem = ({ columnSpan, sectionIdx, columnIdx }: propsInterface) =
           sectionIdx={sectionIdx}
           columnIdx={columnIdx}
           contentIdx={i}
+          key={i}
         />
       )
     }else if(content.contentType === 'media'){
@@ -40,6 +41,7 @@ const CustomGridItem = ({ columnSpan, sectionIdx, columnIdx }: propsInterface) =
           contentIdx={i}
           content={content}
           mode="view"
+          key={i}
         />
       )
     }
@@ -68,9 +70,7 @@ const CustomGridItem = ({ columnSpan, sectionIdx, columnIdx }: propsInterface) =
           />
         )}
         {state.sections[sectionIdx].columns[columnIdx].contents.map((content:any, i:number) => {
-          return (
-            renderContent(content, i)
-          )
+          return renderContent(content, i)
         })}
         </div>
     </GridItem>
