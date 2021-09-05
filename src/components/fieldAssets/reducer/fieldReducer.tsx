@@ -120,19 +120,21 @@ export default function sectionsReducer(draft: any, action: any){
         break
       }
 
-      const sectionAndColumn = draft.sections[action.sectionIdx].columns[action.columnIdx]
+      const contents = [...draft.sections[action.sectionIdx].columns[action.columnIdx].contents]
       
       if(action.direction === 'up'){
         if(action.contentIdx > 0){
-          const currentItem = sectionAndColumn.contents.splice(action.contentIdx, 1)[0]
-          sectionAndColumn.contents.splice(action.contentIdx - 1, 0, currentItem)
+          const currentItem = contents.splice(action.contentIdx, 1)[0]
+          contents.splice(action.contentIdx - 1, 0, currentItem)
         }
       }else if(action.direction === 'down'){
-        if(action.contentIdx < (draft.sections.length - 1)){
-          const currentItem = sectionAndColumn.contents.splice(action.contentIdx, 1)[0]
-          sectionAndColumn.contents.splice(action.contentIdx + 1, 0, currentItem)
+        if(action.contentIdx < (contents.length - 1)){
+          const currentItem = contents.splice(action.contentIdx, 1)[0]
+          contents.splice(action.contentIdx + 1, 0, currentItem)
         }
       }
+      console.log("newContents :" , contents)
+      draft.sections[action.sectionIdx].columns[action.columnIdx].contents = contents
       break
     }
 

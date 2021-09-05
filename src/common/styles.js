@@ -36,7 +36,8 @@ const STYLES = {
   },
   mediaContentEdit: {
     backgroundColor: GLOBALS.colors.lightGray,
-    borderRadius: 10,
+    borderRadius: "12px 0 12px 12px",
+    border: `solid 1px ${GLOBALS.colors.gray}`,
     padding: 10,
     marginBottom: 20,
     gap: 20,

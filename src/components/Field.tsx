@@ -25,6 +25,7 @@ const Field = ({ sdk }: FieldProps) => {
 
   const [state, dispatch] = React.useReducer(curriedReducerFunction, initialState);
   const { ...fieldActions } = useField(dispatch);
+  const sectionsLen = state.sections.length
 
   React.useEffect(() => {
     if (sdk.field.getValue() !== undefined) {
@@ -117,20 +118,24 @@ const Field = ({ sdk }: FieldProps) => {
                 )}
               </div>
               <div style={{...STYLES.sectionBtns}}>
-                <Button
-                  buttonType="muted"
-                  size="small"
-                  icon="ArrowUp"
-                  aria-label="Delete"
-                  onClick={() => fieldActions.changeSectionOrder(i, 'up')}
-                />
-                <Button
-                  buttonType="muted"
-                  size="small"
-                  icon="ArrowDown"
-                  aria-label="Delete"
-                  onClick={() => fieldActions.changeSectionOrder(i, 'down')}
-                />
+                {i > 0 && 
+                  <Button
+                    buttonType="muted"
+                    size="small"
+                    icon="ArrowUp"
+                    aria-label="Delete"
+                    onClick={() => fieldActions.changeSectionOrder(i, 'up')}
+                  />
+                }
+                {i < (sectionsLen - 1) &&
+                  <Button
+                    buttonType="muted"
+                    size="small"
+                    icon="ArrowDown"
+                    aria-label="Delete"
+                    onClick={() => fieldActions.changeSectionOrder(i, 'down')}
+                  />
+                }
                 <Button
                   buttonType="negative"
                   size="small"
