@@ -1,4 +1,9 @@
-This project was bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
+# What is it ?
+
+This app turns a contentful JSON field into a rows and column sections builder.
+
+
+# Contentful informations
 
 ## Available Scripts
 
